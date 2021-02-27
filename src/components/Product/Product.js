@@ -2,34 +2,61 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { AiOutlineLogout } from 'react-icons/ai';
-import { apiProducts } from '../../urlConfig';
+import { apiProducts, apiLogout } from '../../urlConfig';
 import ProductForm from './ProductForm';
 import ProductList from './ProductList';
+import { Link } from 'react-router-dom';
 
 class Product extends Component {
     state = {
         products: [],
         loader: false,
-        url: apiProducts
+        // urlProduct: apiProducts
     };
 
-    getProducts = async () => {
-        const config = {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            }
-        }
-        this.setState({ loader: true });
-        const products = await axios.get(this.state.url, config);
-        this.setState({ 
-            products: products.data,
-            loader: false
-        });
-    };
+    // getProducts = async () => {
+    //     const config = {
+    //         headers: {
+    //             Authorization: 'Bearer ' + localStorage.getItem('token')
+    //         }
+    //     }
+    //     this.setState({ loader: true });
+    //     const products = await axios.get(this.state.urlProduct, config);
+    //     this.setState({ 
+    //         products: products.data,
+    //         loader: false
+    //     });
+    // };
 
-    componentDidMount() {
-        this.getProducts();
-    }
+    // handleLogout () {
+    //     const config = {
+    //         headers: {
+    //             Authorization: 'Bearer ' + localStorage.getItem('token')
+    //         }
+    //     };
+        
+    //     axios.get(apiLogout, config).then (
+    //         res => {
+    //             this.setState({
+    //                 products: [],
+    //                 loader: false
+    //             });
+    //         },
+    //         err => {
+    //             console.log(err)
+    //         }
+    //     )
+    //     // this.setState({ 
+    //     //     products: [],
+    //     //     loader: false
+    //     // });
+    // }
+
+    // componentDidMount() {
+    //     if (this.props.user) {
+    //         this.getProducts();
+    //     }
+    // }
     
     render() { 
         return (
@@ -46,7 +73,7 @@ class Product extends Component {
                                 {
                                     this.props.user
                                     ? <NavDropdown title={this.props.user.name} id="basic-nav-dropdown">
-                                        <NavDropdown.Item on><AiOutlineLogout /> logout</NavDropdown.Item>
+                                        <p onClick={ this.handleLogout }><AiOutlineLogout /> logout</p>
                                     </NavDropdown>
                                     : null
                                 }

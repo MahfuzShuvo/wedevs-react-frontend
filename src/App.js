@@ -1,25 +1,47 @@
 import React, { Component } from 'react';
-import ProductForm from './components/ProductForm';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import ProductList from './components/ProductList';
+import Login from './components/Auth/Login';
+import { Route, Switch } from 'react-router-dom';
+import Register from './components/Auth/Register';
+import PrivateRoute from './components/HOC/PrivateRoute';
+import Product from './components/Product/Product';
+import axios from 'axios';
+import { apiUser } from './urlConfig';
 
 class App extends Component {
-    state = {  }
+    state = {};
+
+    componentDidMount = () => {
+        const config = {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }
+
+        axios.get(apiUser, config).then (
+            res => {
+                this.setState({
+                    user: res.data
+                });
+            },
+            err => {
+                console.log(err)
+            }
+        )
+    };
+
     render() { 
         return (
-            <div className="container">
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <a className="nav-link active" aria-current="page" href="/#">
-                            <h4>Wedevs Assignment - Product CRUD</h4>
-                        </a>
-                    </li>
-                </ul>
-                <div className="main-container">
-                    <ProductForm />
-                    <ProductList />
-                </div>
+            <div>
+                <Switch>
+                    <PrivateRoute path="/" exact component={ () => <Product user={this.state.user} /> } />
+
+                    <Route path="/signin" component={ Login } />
+                    <Route path="/signup" component={ Register } />
+                </Switch>
             </div>
+            
         );
     }
 }

@@ -49,10 +49,12 @@ thead tr th {
     padding: 30px;
     box-shadow: 0 0 8px 2px #cecece4e;
 }
-.btn {
-    padding: 5px 20px;
-    font-size: 12px;
-    font-weight: 600;
+.action-btn {
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+    /* font-weight: 600; */
 }
 .dropdown-item {
     font-size: 12px;

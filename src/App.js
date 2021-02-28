@@ -13,6 +13,7 @@ function App () {
     
     const dispatch = useDispatch();
     const auth = useSelector(state => state.auth);
+    // const product = useSelector(state => state.product);
 
     useEffect(() => {
         if (!auth.authenticate) {

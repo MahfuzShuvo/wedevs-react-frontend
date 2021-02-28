@@ -3,14 +3,13 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { AiOutlineLogout } from 'react-icons/ai';
 import ProductForm from './ProductForm';
 import ProductList from './ProductList';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { signout } from '../../actions';
+import { getAllProducts, signout } from '../../actions';
 
 function Product () {
 
     const auth = useSelector(state => state.auth);
-    const user = useSelector(state => state.user);
+    const product = useSelector(state => state.product);
 
     const dispatch = useDispatch();
 
@@ -18,13 +17,16 @@ function Product () {
         dispatch(signout());
     }
 
+    const getProducts = () => {
+        dispatch(getAllProducts());
+    }
+
     useEffect(() => {
 
         if (auth.authenticate) {
-            console.log(auth)
+            getProducts();
         }
         else {
-            // window.location.reload();
             console.log('null')
         }
 
@@ -48,15 +50,14 @@ function Product () {
                                 </NavDropdown>
                                 : null
                             }
-                            {/*<Nav.Link href="#"><AiOutlineLogout /> logout</Nav.Link>*/}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
             <div className="container">
                 <div className="main-container">
-                    {/*<ProductForm />
-                    <ProductList />*/}
+                    <ProductForm />
+                    <ProductList />
                 </div>
             </div>
         </div>

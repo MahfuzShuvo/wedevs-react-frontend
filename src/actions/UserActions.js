@@ -10,11 +10,16 @@ export const signup = (user) => {
             ...user
         });
 
-        if (res.status === 201) {
-            const { message } = res.data;
+        if (res.status === 200) {
+            // const { message } = res.data;
+            const { token, user, message } = res.data;
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
             dispatch({
                 type: userConstants.USER_REGISTER_SUCCESS,
-                payload: { message }
+                payload: {
+                    token, user, message
+                }
             });
         } else {
             if (res.status === 400) {

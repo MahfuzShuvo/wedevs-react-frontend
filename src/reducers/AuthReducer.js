@@ -1,22 +1,24 @@
-import { authConstants } from "../actions/constants";
+import { authConstants, userConstants } from "../actions/constants";
 
 // const initState = null;
 const initState = {
     token: null,
     user: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        picture: ''
+        id: '',
+        name: '',
+        email: ''
     },
     authenticate: false,
     authenticating: false,
+    register: false,
     loading: false,
     error: null,
-    message: ''
+    message: '',
+    loading: false
 };
 
 const AuthReducer = (state = initState, action) => {
+    console.log(action);
     switch(action.type) {
         case authConstants.LOGIN_REQUEST:
             state = {
@@ -51,6 +53,31 @@ const AuthReducer = (state = initState, action) => {
                 loading: false
             }
             break;
+
+            
+            case userConstants.USER_REGISTER_REQUEST:
+                state = {
+                    ...state,
+                    loading: true
+                }
+                break;
+            case userConstants.USER_REGISTER_SUCCESS:
+                state = {
+                    ...state,
+                    user: action.payload.user,
+                    token: action.payload.token,
+                    loading: false,
+                    authenticate: true,
+                    message: action.payload.message
+                }
+                break;
+            case userConstants.USER_REGISTER_FAILURE:
+                state = {
+                    ...state,
+                    loading: false,
+                    error: action.payload.error
+                }
+                break;
     }
     return state;
 }

@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteProductById, getAllProducts } from '../../actions';
+import { deleteProductById, getAllProducts, updateProduct } from '../../actions';
 import { productImagePath } from '../../urlConfig';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { Button, Form, Modal } from 'react-bootstrap';
 
 function ProductList () {
 
+    const [title, setTitle] = useState('');
+    const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
+    const [previewImage, setPreviewImage] = useState('');
+    // const [uploadImage, setUploadImage] = useState('');
+    const [image, setImage] = useState('');
+    const [productId, setProductId] = useState('');
+    const [showEditModal, setShowEditModal] = useState(false);
     const product = useSelector(state => state.product);
     const dispatch = useDispatch();
 
@@ -13,33 +22,140 @@ function ProductList () {
         dispatch(getAllProducts());
     }, []);
 
-    // const renderDeleteProductModal = () => {
+    const handleProductImage = (e) => {
+        // setImage(e.target.files[0]);
+        let file = e.target.files[0];
+        setImage(file);
 
-    //     return (
-    //         <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-    //             <Modal.Header closeButton>
-    //                 <Modal.Title>Confirm</Modal.Title>
-    //             </Modal.Header>
-    //             <Modal.Body>
-    //                 Are you sure to delete this product?
-    //             </Modal.Body>
-    //             <Modal.Footer>
-    //             <Button variant="danger" onClick={() => setShowDeleteModal(false)}>No</Button>
-    //             <Button variant="primary" onClick={ deleteProductConfirm }>Yes</Button>
-    //             </Modal.Footer>
-    //         </Modal>
-    //     );
-    // }
+        // if (!image) {
+        //     setUploadImage(image);
+        // } else {
+        //     setUploadImage(previewImage);
+        // }
+    }
 
-    // const deleteProductConfirm = () => {
-    //     const payload = {
-    //         productId: product._id,
-    //       };
-    //       console.log(payload)
-    //     //   dispatch(deleteProductById(payload));
-    //     }
-    //     setShowDeleteModal(false);
-    // }
+    const editProductModal = (product) => {
+        console.log(product.image)
+        setProductId(product.id);
+        setTitle(product.title);
+        setPrice(product.price);
+        setDescription(product.description);
+        setPreviewImage(product.image);
+
+        setShowEditModal(true);
+    }
+
+    const handleEditProductModalClose = () => {
+        setShowEditModal(false)
+    }
+
+    const handleEditProduct = (e) => {
+        e.preventDefault();
+        console.log(image);
+        // console.log({previewImage});
+        
+        // console.log({uploadImage});
+
+        const form = new FormData();
+        form.append('title', title);
+        form.append('description', description);
+        form.append('price', price);
+        form.append('image', image);
+
+        // console.log(form)
+        // setImage(form.get('image'))
+
+        // const product = { title, description, price, image }
+        // console.log(product)
+        dispatch(updateProduct(form, productId));
+        // setShowEditModal(false)
+    }
+
+    useEffect(() => {
+        if (!product.loading) {
+            setShowEditModal(false);
+            setTitle('');
+            setPrice('');
+            setDescription('');
+            setImage('');
+        }
+    }, [product.loading]);
+
+
+    const renderEditProductModel = () => {
+        
+        return (
+            <Modal show={showEditModal} onHide={ handleEditProductModalClose }>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control 
+                                type="text" 
+                                placeholder="Enter product title"
+                                // name="title"
+                                value={ title }
+                                onChange={(e) => setTitle(e.target.value)}
+                                // required="required"
+                            />
+                        </Form.Group>
+                    
+                        <Form.Group>
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control 
+                                type="number" 
+                                placeholder="Enter product price"
+                                value={ price }
+                                onChange={(e) => setPrice(e.target.value)}
+                                // required="required"
+                            />
+                        </Form.Group>
+                    
+                        <Form.Group>
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control 
+                                type="text" 
+                                placeholder="Enter product description"
+                                value={ description }
+                                onChange={(e) => setDescription(e.target.value)}
+                                // required="required"
+                            />
+                        </Form.Group>
+
+                        <div>
+                            <img src={productImagePath(previewImage)} alt="" style={{ width: '50px' }}/>
+                        </div>
+                    
+                        <Form.Group>
+                            <Form.Label>Product Image</Form.Label>
+                            <Form.Control 
+                                type="file" 
+                                // name={ image }
+                                onChange={ 
+                                    // handleProductImage 
+                                    e => {
+                                        let files = e.target.files;
+                                        if (files.length === 1) {
+                                            handleProductImage(e);
+                                        } else {
+                                            e.target.value = '';
+                                        }
+                                    }
+                                }
+                                // required="required"
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button className="submit-button" variant="primary" size="sm" onClick={ handleEditProduct }>update</Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
 
 
     return (
@@ -52,7 +168,7 @@ function ProductList () {
                         <th style={{ textAlign: 'center' }}>Image</th>
                         <th>Price</th>
                         <th>Description</th>
-                        <th style={{ textAlign: 'center', width: '150px' }}>Action</th>
+                        <th style={{ textAlign: 'center', width: '100px' }}>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,22 +177,33 @@ function ProductList () {
                         ? product.products.map(pro => {
                             return (
                                 <tr key={pro.id}>
-                                    <td style={{ textAlign: 'center' }}>1</td>
+                                    <td style={{ textAlign: 'center' }}>{pro.id}</td>
                                     <td>{pro.title}</td>
                                     <td style={{ textAlign: 'center' }}>
                                         <img src={productImagePath(pro.image)} alt="" style={{ width: '50px' }} />
                                     </td>
                                     <td>{pro.price}</td>
                                     <td>{pro.description}</td>
-                                    <td>
-                                        <button type="submit" className="btn btn-sm btn-info action-btn"><FaEdit /></button>
+                                    <td style={{ textAlign: 'center' }}>
+                                        <button
+                                            className="btn btn-sm btn-info action-btn"
+                                            // onClick={() => {
+                                            //     const payload = {
+                                            //       productId: pro.id,
+                                            //     };
+
+                                            //     console.log(payload)
+                                            //   }}
+                                            onClick={() => editProductModal(pro)}
+                                        >
+                                            <FaEdit />
+                                        </button>
                                         <button
                                             className="btn btn-sm btn-danger action-btn"
                                             onClick={() => {
                                                 const payload = {
                                                   productId: pro.id,
                                                 };
-                                                // console.log(payload)
                                                 dispatch(deleteProductById(payload));
                                               }}
                                         >
@@ -89,6 +216,7 @@ function ProductList () {
                     }
                 </tbody>
             </table>
+            { renderEditProductModel() }
         </div>
     );
 }

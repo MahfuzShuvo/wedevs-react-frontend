@@ -17,20 +17,20 @@ function Product () {
         dispatch(signout());
     }
 
-    const getProducts = () => {
-        dispatch(getAllProducts());
-    }
+    // const getProducts = () => {
+    //     dispatch(getAllProducts());
+    // }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (auth.authenticate) {
-            getProducts();
-        }
-        else {
-            console.log('null')
-        }
+    //     if (auth.authenticate) {
+    //         getProducts();
+    //     }
+    //     else {
+    //         console.log('null')
+    //     }
 
-    }, [auth.authenticate]);
+    // }, [auth.authenticate]);
 
     return (
         <div>

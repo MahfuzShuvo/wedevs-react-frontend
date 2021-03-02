@@ -54,29 +54,29 @@ const AuthReducer = (state = initState, action) => {
             break;
 
             
-            case userConstants.USER_REGISTER_REQUEST:
-                state = {
-                    ...state,
-                    loading: true
-                }
-                break;
-            case userConstants.USER_REGISTER_SUCCESS:
-                state = {
-                    ...state,
-                    user: action.payload.user,
-                    token: action.payload.token,
-                    loading: false,
-                    authenticate: true,
-                    message: action.payload.message
-                }
-                break;
-            case userConstants.USER_REGISTER_FAILURE:
-                state = {
-                    ...state,
-                    loading: false,
-                    error: action.payload.error
-                }
-                break;
+        case userConstants.USER_REGISTER_REQUEST:
+            state = {
+                ...state,
+                loading: true
+            }
+            break;
+        case userConstants.USER_REGISTER_SUCCESS:
+            state = {
+                ...state,
+                user: action.payload.user,
+                token: action.payload.token,
+                loading: false,
+                authenticate: true,
+                message: action.payload.message
+            }
+            break;
+        case userConstants.USER_REGISTER_FAILURE:
+            state = {
+                ...state,
+                loading: false,
+                error: action.payload.error
+            }
+            break;
     }
     return state;
 }

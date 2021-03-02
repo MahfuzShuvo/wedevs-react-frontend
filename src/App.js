@@ -7,7 +7,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Product from './components/Product/Product';
 import { useDispatch, useSelector } from 'react-redux';
-import { isUserLoggedIn } from './actions';
+import { getAllProducts, isUserLoggedIn } from './actions';
 
 function App () {
     
@@ -18,7 +18,10 @@ function App () {
     useEffect(() => {
         if (!auth.authenticate) {
             dispatch(isUserLoggedIn());
-        }
+        } 
+        // if (auth.authenticate) {
+        //     dispatch(getAllProducts());
+        // }
     }, [auth.authenticate]);
 
     return (

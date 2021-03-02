@@ -1,6 +1,50 @@
 import axios from "../Helper/axios";
 import { productConstants } from "./constants";
 
+export const addProduct = (form) => {
+    return async dispatch => {
+
+        dispatch({ type: productConstants.ADD_NEW_PRODUCT_REQUEST });
+        const res = await axios.post(`/products`, form);
+        console.log(res);
+        
+        if (res.status === 200) {
+            dispatch({
+                type: productConstants.ADD_NEW_PRODUCT_SUCCESS,
+                // payload: { product: res.data.product }
+            });
+            dispatch(getAllProducts());
+        } else {
+            dispatch({
+                type: productConstants.ADD_NEW_PRODUCT_FAILURE,
+                payload: { error: res.data.error }
+            })
+        }
+    }
+}
+
+export const updateProduct = (form, id) => {
+    return async dispatch => {
+        // console.log(form.get('title'))
+        dispatch({ type: productConstants.UPDATE_PRODUCT_REQUEST });
+        const res = await axios.post(`/products/${id}`, form);
+        console.log({res});
+        
+        if (res.status === 200) {
+            dispatch({
+                type: productConstants.UPDATE_PRODUCT_SUCCESS,
+                // payload: { product: res.data.product }
+            });
+            dispatch(getAllProducts());
+        } else {
+            dispatch({
+                type: productConstants.UPDATE_PRODUCT_FAILURE,
+                payload: { error: res.data.error }
+            })
+        }
+    }
+}
+
 export const getAllProducts = (products) => {
     
     return async (dispatch) => {
@@ -57,5 +101,5 @@ export const deleteProductById = (payload) => {
         } catch (error) {
             console.log(error);
         }
-    };
-  };
+    }
+  }

@@ -188,7 +188,7 @@ function ProductList () {
                                     </td>
                                 </tr>
                             )
-                        }) : null
+                        }) : <tr><td colSpan={6} style={{ textAlign: 'center' }}>No data available</td></tr>
                     }
                 </tbody>
             </table>

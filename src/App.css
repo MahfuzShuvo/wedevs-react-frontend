@@ -53,7 +53,7 @@ p {
     margin-right: 10px;
 }
 thead tr th {
-    background: #e0e0e0;
+    background: #cfcfcf;
 }
 .signin-content {
     background: #ececee5c;
@@ -82,5 +82,8 @@ thead tr th {
     cursor: pointer;
 }
 .dropdown-menu span:hover {
-    color: #6c757d;
+    color: #007bff;
+}
+.table {
+    font-size: 12px;
 }

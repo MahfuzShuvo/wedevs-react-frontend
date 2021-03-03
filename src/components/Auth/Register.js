@@ -9,9 +9,7 @@ function Register () {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const [error, setError] = useState('');
     const auth = useSelector(state => state.auth);
-    const user = useSelector(state => state.user);
 
     const dispatch = useDispatch();
 
@@ -21,10 +19,6 @@ function Register () {
         dispatch(signup(user));
     };
 
-    // const token = window.localStorage.getItem('token');
-    // if (token) {
-    //     return <Redirect to={`/`} />
-    // }
 
     if (auth.authenticate) {
         return <Redirect to={`/`} />
@@ -44,7 +38,7 @@ function Register () {
                             <Form.Group>
                                 <Form.Control 
                                     type="text" 
-                                    placeholder="Enter name"
+                                    placeholder="Name"
                                     value={ name }
                                     onChange={(e) => setName(e.target.value)}
                                     required="required"
@@ -54,7 +48,7 @@ function Register () {
                             <Form.Group>
                                 <Form.Control 
                                     type="email" 
-                                    placeholder="Enter email"
+                                    placeholder="Email"
                                     value={ email }
                                     onChange={(e) => setEmail(e.target.value)}
                                     required="required"

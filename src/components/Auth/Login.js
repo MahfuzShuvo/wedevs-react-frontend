@@ -33,7 +33,7 @@ function Login () {
                             <Form.Group>
                                 <Form.Control 
                                     type="email" 
-                                    placeholder="Enter email"
+                                    placeholder="Email"
                                     value={ email }
                                     onChange={(e) => setEmail(e.target.value)}
                                     required="required"

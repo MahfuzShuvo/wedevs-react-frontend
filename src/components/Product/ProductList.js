@@ -11,7 +11,6 @@ function ProductList () {
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [previewImage, setPreviewImage] = useState('');
-    // const [uploadImage, setUploadImage] = useState('');
     const [image, setImage] = useState('');
     const [productId, setProductId] = useState('');
     const [showEditModal, setShowEditModal] = useState(false);
@@ -23,15 +22,8 @@ function ProductList () {
     }, []);
 
     const handleProductImage = (e) => {
-        // setImage(e.target.files[0]);
         let file = e.target.files[0];
         setImage(file);
-
-        // if (!image) {
-        //     setUploadImage(image);
-        // } else {
-        //     setUploadImage(previewImage);
-        // }
     }
 
     const editProductModal = (product) => {
@@ -51,24 +43,15 @@ function ProductList () {
 
     const handleEditProduct = (e) => {
         e.preventDefault();
-        console.log(image);
-        // console.log({previewImage});
-        
-        // console.log({uploadImage});
 
         const form = new FormData();
         form.append('title', title);
         form.append('description', description);
         form.append('price', price);
         form.append('image', image);
+        form.append('_method', 'PUT');
 
-        // console.log(form)
-        // setImage(form.get('image'))
-
-        // const product = { title, description, price, image }
-        // console.log(product)
         dispatch(updateProduct(form, productId));
-        // setShowEditModal(false)
     }
 
     useEffect(() => {
@@ -174,10 +157,10 @@ function ProductList () {
                 <tbody>
                     {
                         product.products.length > 0 
-                        ? product.products.map(pro => {
+                        ? product.products.map((pro, index) => {
                             return (
                                 <tr key={pro.id}>
-                                    <td style={{ textAlign: 'center' }}>{pro.id}</td>
+                                    <td style={{ textAlign: 'center' }}>{index+1}</td>
                                     <td>{pro.title}</td>
                                     <td style={{ textAlign: 'center' }}>
                                         <img src={productImagePath(pro.image)} alt="" style={{ width: '50px' }} />
@@ -187,13 +170,6 @@ function ProductList () {
                                     <td style={{ textAlign: 'center' }}>
                                         <button
                                             className="btn btn-sm btn-info action-btn"
-                                            // onClick={() => {
-                                            //     const payload = {
-                                            //       productId: pro.id,
-                                            //     };
-
-                                            //     console.log(payload)
-                                            //   }}
                                             onClick={() => editProductModal(pro)}
                                         >
                                             <FaEdit />
